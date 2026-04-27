@@ -14,6 +14,11 @@ let timer = null;
 // 取得 vite.config.js 中設定的 base 路徑
 const baseUrl = import.meta.env.BASE_URL;
 
+// --- 關鍵修改點：使用 Vite 內建的 URL 解析動態抓取 src/assets/ 的圖片 ---
+const getImageUrl = (name) => {
+  return new URL(`./assets/${name}`, import.meta.url).href;
+};
+
 // --- 關鍵修改點 2：資料陣列裡的 image 欄位現在只存檔名 ---
 const questions = ref([
   {
@@ -141,7 +146,7 @@ onUnmounted(() => clearInterval(timer));
 
         <!-- ★ 強制加上 inline-style，確保容器和圖片有明確的高度，不會被失效的 CSS 吃掉 ★ -->
         <div class="w-full rounded-3xl overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner" style="min-height: 220px;">
-          <img :src="`${baseUrl}${currentQuestion.image}`" alt="情境圖" class="w-full h-full object-contain" style="display: block; max-height: 220px; margin: 0 auto;">
+          <img :src="getImageUrl(currentQuestion.image)" alt="情境圖" class="w-full h-full object-contain" style="display: block; max-height: 220px; margin: 0 auto;">
         </div>
 
         <h2 class="text-2xl font-bold mb-6 text-gray-700 leading-relaxed">{{ currentQuestion.title }}</h2>
