@@ -123,6 +123,30 @@ const startModule = (type) => {
   if (type === 'quiz') startTimer();
 };
 
+// --- 💯 紙花特效邏輯 ---
+const triggerConfetti = () => {
+  if (window.confetti) {
+    const duration = 3000; // 持續 3 秒
+    const end = Date.now() + duration;
+
+    const frame = () => {
+      window.confetti({
+        particleCount: 5, angle: 60, spread: 55, origin: { x: 0 },
+        colors: ['#fbc2eb', '#a6c1ee', '#aa3bff', '#f43f5e']
+      });
+      window.confetti({
+        particleCount: 5, angle: 120, spread: 55, origin: { x: 1 },
+        colors: ['#fbc2eb', '#a6c1ee', '#aa3bff', '#f43f5e']
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    };
+    frame();
+  }
+};
+
 const checkAnswer = (idx) => {
   if (showFeedback.value) return;
   clearInterval(timer); // 答題後停止計時
@@ -139,14 +163,17 @@ const nextStep = () => {
     startTimer(); // 進入下一題重新計時
   } else {
     state.value = 'result';
+    if (score.value === 100) {
+      // 稍微延遲，等待轉場動畫完成後再噴灑紙花
+      setTimeout(() => triggerConfetti(), 300);
+    }
   }
 };
 </script>
 
 <template>
-  <!-- 移除 bg-[#f8fbfe] 讓 index.html 的漸層背景可以透出來 -->
-  <!-- 首頁佈局：背景是漸層，內容是三個白框 -->
-  <div v-if="state === 'start'" class="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 box-border font-sans text-gray-700">
+  <Transition name="fade-up" mode="out-in">
+    <div v-if="state === 'start'" key="start-page" class="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 box-border font-sans text-gray-700">
       <div class="text-center mb-4 md:mb-12 mt-2 md:mt-8">
         <div class="text-4xl md:text-7xl mb-1 md:mb-4">🛡️</div>
         <h1 class="text-2xl md:text-5xl font-black mb-1 md:mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-rose-400">
@@ -190,13 +217,13 @@ const nextStep = () => {
           </button>
         </div>
       </div>
-  </div>
+    </div>
 
-  <!-- 其他頁面佈局：背景是漸層，中間有一個白色卡片 -->
-  <div v-else class="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 box-border font-sans text-gray-700">
-    <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-2xl p-5 md:p-8 overflow-hidden">
+    <div v-else key="other-pages" class="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 box-border font-sans text-gray-700">
+      <div class="max-w-lg w-full bg-white rounded-[2rem] shadow-2xl p-5 md:p-8 overflow-hidden">
       
-      <div v-if="state === 'quiz'">
+        <Transition name="fade-up" mode="out-in">
+          <div v-if="state === 'quiz'" key="quiz">
         <div class="flex justify-between items-center mb-3 md:mb-4 text-xs md:text-sm font-bold text-gray-400 px-1">
           <span class="bg-gray-100 px-3 py-1 rounded-full">題號 {{ currentStep + 1 }} / 5</span>
           <span class="text-orange-500 font-black text-base md:text-xl flex items-center gap-1"><span>⏱️</span> {{ timeLeft }}s</span>
@@ -216,7 +243,7 @@ const nextStep = () => {
             class="w-full text-left p-3 md:p-4 border-2 rounded-xl md:rounded-2xl text-sm md:text-base font-bold transition-all"
             :class="[
               !showFeedback ? 'bg-white border-gray-100 hover:border-sky-300 hover:bg-sky-50' : 
-              (index === currentQuestion.answer ? 'bg-green-100 border-green-500 text-green-700 shadow-sm' : 
+              (index === currentQuestion.answer ? 'bg-green-100 border-green-500 text-green-700 shadow-sm animate-glow ' + (userChoice === index ? 'animate-bounce-short' : '') : 
               (userChoice === index ? 'bg-red-100 border-red-500 text-red-700 shadow-sm' : 'opacity-40 grayscale'))
             ]">
             {{ opt }}
@@ -231,9 +258,9 @@ const nextStep = () => {
             {{ currentStep === 4 ? '查看特訓結果' : '前進下一關' }}
           </button>
         </div>
-      </div>
+          </div>
 
-      <div v-else-if="state === 'toolbox'" class="space-y-3 md:space-y-4">
+          <div v-else-if="state === 'toolbox'" class="space-y-3 md:space-y-4" key="toolbox">
         <div class="flex items-center justify-between mb-2 md:mb-4">
           <h2 class="text-xl md:text-2xl font-black text-sky-600">🛠️ 查證工具箱</h2>
           <button @click="state = 'start'" class="text-gray-300 text-2xl">✕</button>
@@ -247,9 +274,9 @@ const nextStep = () => {
           </a>
         </div>
         <button @click="state = 'start'" class="w-full bg-gray-800 text-white py-3 md:py-4 rounded-2xl md:rounded-3xl font-bold mt-2 md:mt-4 shadow-lg text-sm md:text-base">回到首頁</button>
-      </div>
+          </div>
 
-      <div v-else-if="state === 'news'" class="space-y-3 md:space-y-4">
+          <div v-else-if="state === 'news'" class="space-y-3 md:space-y-4" key="news">
         <div class="flex items-center justify-between mb-2 md:mb-4">
           <h2 class="text-xl md:text-2xl font-black text-amber-500">🚨 英雄情報站</h2>
           <button @click="state = 'start'" class="text-gray-300 text-2xl">✕</button>
@@ -265,24 +292,61 @@ const nextStep = () => {
           <p class="text-xs text-gray-500 leading-relaxed">{{ item.content }}</p>
         </a>
         <button @click="state = 'start'" class="w-full bg-gray-800 text-white py-3 md:py-4 rounded-2xl md:rounded-3xl font-bold mt-2 md:mt-4 shadow-lg text-sm md:text-base">回到首頁</button>
-      </div>
+          </div>
 
-      <div v-else class="text-center py-6">
+          <div v-else class="text-center py-6" key="result">
         <div class="text-6xl md:text-7xl mb-4">🏆</div>
         <h2 class="text-4xl md:text-5xl font-black text-blue-500 mb-4">{{ score }} <span class="text-xl text-gray-400">分</span></h2>
         <p class="text-sm md:text-base text-gray-500 font-bold mb-8 md:mb-10 leading-relaxed px-4" v-html="resultMessage"></p>
         <button @click="state = 'start'" class="bg-sky-400 text-white px-10 md:px-12 py-3 md:py-4 rounded-full font-bold shadow-xl transform hover:scale-110 transition text-sm md:text-base">
           重新訓練
         </button>
-      </div>
+          </div>
+        </Transition>
 
+      </div>
     </div>
-    </div>
+  </Transition>
 </template>
 
 <style scoped>
 /* 簡單的按鈕回饋動畫 */
 button:active {
   transform: scale(0.95);
+}
+
+/* 頁面切換：淡入淡出並輕微向上位移 */
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.fade-up-enter-from {
+  opacity: 0;
+  transform: translateY(15px);
+}
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(-15px);
+}
+
+/* 正確答案綠色光圈閃爍 */
+.animate-glow {
+  animation: pulse-green 1.5s infinite;
+}
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* 答對時的輕微跳動 */
+.animate-bounce-short {
+  animation: bounce-short 0.5s ease-out;
+}
+@keyframes bounce-short {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8px); }
+  50% { transform: translateY(0); }
+  70% { transform: translateY(-4px); }
 }
 </style>
