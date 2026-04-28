@@ -78,9 +78,9 @@ const tools = [
 
 // --- 模組三：最新快訊數據 ---
 const news = [
-  { tag: "國際", date: "2023/05/23", title: "AI 生成假五角大廈爆炸圖", content: "網路流傳 AI 生成的五角大廈爆炸圖片，一度引發美股閃跌。眼見不一定為憑，請務必多方查證消息來源！", url: "https://news.tvbs.com.tw/world/2117325" },
-  { tag: "科技", date: "2023/06/15", title: "Deepfake 詐騙來襲！", content: "詐騙集團利用 AI 換臉與語音技術模仿親友視訊借錢。遇到此情況請務必約定專屬暗號或切斷後回撥確認！", url: "https://www.bnext.com.tw/article/78325/deepfake-fraud-" },
-  { tag: "警訊", date: "2023/03/22", title: "點網址搶領6000元簡訊是假的", content: "收到領取補助的簡訊千萬別點！數位部提醒這是釣魚陷阱，已報警處理。請認明政府官方網址結尾為 .gov.tw。", url: "https://tw.news.yahoo.com/%E9%BB%9E%E7%B6%B2%E5%9D%80-%E6%90%B6%E9%A0%986000%E5%85%83-%E7%B0%A1%E8%A8%8A%E6%98%AF%E5%81%87%E7%9A%84-%E6%95%B8%E4%BD%8D%E9%83%A8%E5%87%BA%E6%89%8B%E4%BA%86-%E5%B7%B2%E5%A0%B1%E8%AD%A6%E8%99%95%E7%90%86-030006003.html" }
+  { tag: "國際", date: "2023/05/23", title: "有圖有真相？AI生成「五角大廈爆炸」假照片瘋傳 美股受驚閃跌", content: "網路流傳 AI 生成的五角大廈爆炸圖片，一度引發美股閃跌。眼見不一定為憑，請務必多方查證消息來源！", url: "https://news.tvbs.com.tw/world/2117325" },
+  { tag: "科技", date: "2024/02/05", title: "假財務長「AI變臉」打視訊，跨國企業被騙走8億！瞞天過海關鍵是？", content: "詐騙集團利用 AI 換臉與語音技術模仿親友視訊借錢。遇到此情況請務必約定專屬暗號或切斷後回撥確認！", url: "https://www.bnext.com.tw/article/78325/deepfake-fraud-" },
+  { tag: "警訊", date: "2023/03/22", title: "點網址搶領6000元簡訊是假的 數位部出手了 已報警處理", content: "收到領取補助的簡訊千萬別點！數位部提醒這是釣魚陷阱，已報警處理。請認明政府官方網址結尾為 .gov.tw。", url: "https://tw.news.yahoo.com/%E9%BB%9E%E7%B6%B2%E5%9D%80-%E6%90%B6%E9%A0%986000%E5%85%83-%E7%B0%A1%E8%A8%8A%E6%98%AF%E5%81%87%E7%9A%84-%E6%95%B8%E4%BD%8D%E9%83%A8%E5%87%BA%E6%89%8B%E4%BA%86-%E5%B7%B2%E5%A0%B1%E8%AD%A6%E8%99%95%E7%90%86-030006003.html" }
 ];
 
 // --- 邏輯函數 ---
