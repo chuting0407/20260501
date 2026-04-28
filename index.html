@@ -7,9 +7,19 @@
     <!-- 保留 Tailwind CDN，讓樣式能正常運作 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
+        html {
             background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            min-height: 100vh;
+            background-attachment: fixed; /* 讓背景固定，往下捲動時不重複拼貼 */
+            background-size: cover; /* 確保背景填滿整個螢幕 */
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100%; 
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            background: transparent; /* 讓 body 透明，才不會蓋住 html 的背景 */
             font-family: 'Microsoft JhengHei', sans-serif;
         }
         .cute-card {
@@ -21,7 +31,7 @@
         }
     </style>
 </head>
-<body class="py-10 px-4">
+<body class="m-0 p-0"> <!-- 取消預設的邊距，避免超出 100vh 產生白線 -->
     <!-- Vue 專案的根節點 -->
     <div id="app"></div>
 
