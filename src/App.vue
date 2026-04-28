@@ -28,35 +28,35 @@ const questions = ref([
     image: "q1.png", 
     options: ["這是一頁式詐騙購物網站", "撿到便宜了，趕快下單", "這代表網紅很有影響力"],
     answer: 0,
-    feedback: "【教學重點】網址若為亂碼通常是詐騙網站。購物應選擇知名電商平台或官方網站才有保障。"
+    feedback: "網址若為亂碼通常是詐騙網站。購物應選擇知名電商平台或官方網站才有保障。"
   },
   {
     title: "收到來自朋友 LINE 傳來「幫我投票」並要求簡訊驗證碼，該？",
     image: "q2.png",
     options: ["朋友的事就是我的事，立刻給", "回傳驗證碼並幫他分享", "這是典型的「盜帳號」詐騙"],
     answer: 2,
-    feedback: "【教學重點】驗證碼就像家裡鑰匙，絕不能給任何人！一旦給出，你的帳號就會被盜用。"
+    feedback: "驗證碼就像家裡鑰匙，絕不能給任何人！一旦給出，你的帳號就會被盜用。"
   },
   {
     title: "某網紅在影片中推薦課程，卻完全沒提到是否有收廠商的錢，這涉及？",
     image: "q3.png",
     options: ["這沒關係，他只是單純分享", "廣告標露與誠信透明度問題", "代表該產品真的很受歡迎"],
     answer: 1,
-    feedback: "【教學重點】業配透明度是數位素養的重要環節。收錢卻沒標註「廣告」會誤導消費者判斷。"
+    feedback: "業配透明度是數位素養的重要環節。收錢卻沒標註「廣告」會誤導消費者判斷。"
   },
   {
     title: "網路上流行「測你的前世是什麼動物」的心理測驗，要求授權登入社群帳號，這可能是？",
     image: "q4.png",
     options: ["過度索取權限的個資外洩陷阱", "只是好玩的遊戲，不用擔心", "社群官方推出的新功能"],
     answer: 0,
-    feedback: "【教學重點】許多免費心理測驗會要求授權存取社群帳號，藉此收集你的好友名單與個資，請謹慎授權！"
+    feedback: "】許多免費心理測驗會要求授權存取社群帳號，藉此收集你的好友名單與個資，請謹慎授權！"
   },
   {
     title: "看到標題驚悚的健康資訊（如：吃這個會致癌），內文卻沒有醫學出處，該？",
     image: "q5.png",
     options: ["太恐怖了，快分享出去", "寧可信其有，不可信其無", "這是未經證實的「假訊息」"],
     answer: 2,
-    feedback: "【教學重點】數位時代要學會「查證事實」。未經證實的醫療資訊容易造成恐慌，轉傳前應先檢查。"
+    feedback: "數位時代要學會「查證事實」。未經證實的醫療資訊容易造成恐慌，轉傳前應先檢查。"
   }
 ]);
 
@@ -86,6 +86,19 @@ const news = [
 // --- 邏輯函數 ---
 const currentQuestion = computed(() => questions.value[currentStep.value]);
 const progress = computed(() => ((currentStep.value + 1) / questions.value.length) * 100);
+
+// --- 根據分數產生不同的結算標語 ---
+const resultMessage = computed(() => {
+  if (score.value === 100) {
+    return "特訓完美通過！🏆<br>你是真正的「防詐大師」，沒有任何詐騙能逃過你的法眼！";
+  } else if (score.value >= 80) {
+    return "表現優異！🌟<br>具備很棒的防護意識，稍加注意就能百毒不侵！";
+  } else if (score.value >= 60) {
+    return "防護及格！🛡️<br>基本概念有了，但遇到新型狡猾詐騙仍要多加小心喔！";
+  } else {
+    return "危險邊緣！⚠️<br>你的防護罩太薄弱啦，強烈建議去「工具箱」與「情報站」多練練！";
+  }
+});
 
 const startTimer = () => {
   clearInterval(timer);
@@ -257,9 +270,7 @@ const nextStep = () => {
       <div v-else class="text-center py-6">
         <div class="text-6xl md:text-7xl mb-4">🏆</div>
         <h2 class="text-4xl md:text-5xl font-black text-blue-500 mb-4">{{ score }} <span class="text-xl text-gray-400">分</span></h2>
-        <p class="text-sm md:text-base text-gray-500 font-bold mb-8 md:mb-10 leading-relaxed px-4">
-          特訓完成！<br>你已經具備對抗數位詐騙的英雄潛力！
-        </p>
+        <p class="text-sm md:text-base text-gray-500 font-bold mb-8 md:mb-10 leading-relaxed px-4" v-html="resultMessage"></p>
         <button @click="state = 'start'" class="bg-sky-400 text-white px-10 md:px-12 py-3 md:py-4 rounded-full font-bold shadow-xl transform hover:scale-110 transition text-sm md:text-base">
           重新訓練
         </button>
