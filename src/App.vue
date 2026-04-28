@@ -64,7 +64,7 @@ const questions = ref([
 const tools = [
   { name: "165 全民防騙網", desc: "政府官方反詐騙平台，可查詢最新案件。", url: "https://165.npa.gov.tw/" },
   { name: "MyGoPen 真相發現", desc: "專業的假訊息查證網站，提供闢謠服務。", url: "https://www.mygopen.com/" },
-  { name: "LINE 訊息查證", desc: "官方查證工具，一鍵辨識假新聞與詐騙。", url: "https://fact-check.line.me/" }
+  { name: "LINE 訊息查證", desc: "官方查證工具，一鍵辨識假新聞與詐騙。", url: "https://fact-checker.line.me/" }
 ];
 
 // --- 模組三：最新快訊數據 ---
