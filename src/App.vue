@@ -243,8 +243,8 @@ const nextStep = () => {
             class="w-full text-left p-3 md:p-4 border-2 rounded-xl md:rounded-2xl text-sm md:text-base font-bold transition-all"
             :class="[
               !showFeedback ? 'bg-white border-gray-100 hover:border-sky-300 hover:bg-sky-50' : 
-              (index === currentQuestion.answer ? 'bg-green-100 border-green-500 text-green-700 shadow-sm animate-glow ' + (userChoice === index ? 'animate-bounce-short' : '') : 
-              (userChoice === index ? 'bg-red-100 border-red-500 text-red-700 shadow-sm' : 'opacity-40 grayscale'))
+              (index === currentQuestion.answer ? 'bg-green-100 border-green-500 text-green-700 shadow-sm animate-glow' : 
+              (userChoice === index ? 'bg-red-100 border-red-500 text-red-700 shadow-sm animate-shake' : 'opacity-40 grayscale'))
             ]">
             {{ opt }}
           </button>
@@ -339,14 +339,13 @@ button:active {
   100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
-/* 答對時的輕微跳動 */
-.animate-bounce-short {
-  animation: bounce-short 0.5s ease-out;
+/* 答錯時的左右晃動 (震動) */
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
 }
-@keyframes bounce-short {
-  0%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-8px); }
-  50% { transform: translateY(0); }
-  70% { transform: translateY(-4px); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
 }
 </style>
