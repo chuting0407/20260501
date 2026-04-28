@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 // 狀態管理：start(首頁), quiz(測驗), toolbox(工具箱), news(快訊), result(分數)
 const state = ref('start'); 
@@ -59,6 +59,15 @@ const questions = ref([
     feedback: "【教學重點】數位時代要學會「查證事實」。未經證實的醫療資訊容易造成恐慌，轉傳前應先檢查。"
   }
 ]);
+
+// --- 圖片預載 (Preload) 邏輯 ---
+// 在網頁剛載入時，就提早在背景把圖片全部下載好，避免切換題目時卡頓
+onMounted(() => {
+  questions.value.forEach((q) => {
+    const img = new Image();
+    img.src = getPath(q.image);
+  });
+});
 
 // --- 模組二：工具箱數據 ---
 const tools = [
@@ -183,7 +192,8 @@ const nextStep = () => {
         
         <!-- 去除了多餘的邊框背景，並壓縮圖片區域高度以適應手機 -->
         <div class="w-full h-32 md:h-48 bg-transparent rounded-2xl md:rounded-3xl mb-4 overflow-hidden flex items-center justify-center">
-          <img :src="getPath(currentQuestion.image)" class="max-w-full max-h-full object-contain">
+          <!-- 加上 :key 強制 Vue 換題時刷新圖片元件，避免殘留上一題的畫面 -->
+          <img :key="currentQuestion.image" :src="getPath(currentQuestion.image)" class="max-w-full max-h-full object-contain">
         </div>
         
         <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800 leading-snug">{{ currentQuestion.title }}</h2>
